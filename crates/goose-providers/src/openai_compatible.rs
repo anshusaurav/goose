@@ -123,7 +123,9 @@ impl Provider for OpenAiCompatibleProvider {
             .with_retry(|| async {
                 let resp = self
                     .api_client
-                    .response_post(&completions_path, &payload)
+                    .request(&completions_path)
+                    .streaming(self.supports_streaming)
+                    .response_post(&payload)
                     .await?;
                 handle_status(resp).await
             })

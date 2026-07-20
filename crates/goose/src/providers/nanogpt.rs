@@ -196,7 +196,9 @@ impl Provider for NanoGptProvider {
             .with_retry(|| async {
                 let resp = self
                     .api_client
-                    .response_post("chat/completions", &payload)
+                    .request("chat/completions")
+                    .streaming(true)
+                    .response_post(&payload)
                     .await?;
                 handle_status(resp).await
             })

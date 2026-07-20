@@ -94,7 +94,9 @@ impl SnowflakeProvider {
     async fn post(&self, payload: &Value) -> Result<Value, ProviderError> {
         let response = self
             .api_client
-            .response_post("api/v2/cortex/inference:complete", payload)
+            .request("api/v2/cortex/inference:complete")
+            .streaming(true)
+            .response_post(payload)
             .await?;
 
         let status = response.status();

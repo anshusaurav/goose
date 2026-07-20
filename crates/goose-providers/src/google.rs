@@ -97,7 +97,12 @@ impl GoogleProvider {
         payload: &Value,
     ) -> Result<reqwest::Response, ProviderError> {
         let path = format!("v1beta/models/{}:streamGenerateContent?alt=sse", model_name);
-        let response = self.api_client.response_post(&path, payload).await?;
+        let response = self
+            .api_client
+            .request(&path)
+            .streaming(true)
+            .response_post(payload)
+            .await?;
         handle_status(response).await
     }
 }
